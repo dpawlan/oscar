@@ -1,0 +1,8 @@
+{
+  "name": "gmail",
+  "version": "1.0.0",
+  "description": "Gmail integration for Claude Code with email management tools",
+  "author": {
+    "name": "Oscar"
+  }
+}

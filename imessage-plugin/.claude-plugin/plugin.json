@@ -1,0 +1,8 @@
+{
+  "name": "imessage",
+  "version": "1.0.0",
+  "description": "iMessage integration for Claude Code with read-only message access",
+  "author": {
+    "name": "Oscar"
+  }
+}

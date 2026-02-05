@@ -1,0 +1,8 @@
+{
+  "name": "oscar",
+  "version": "1.0.0",
+  "description": "Unified contextual search across Gmail, iMessage, and Clay CRM - find information by searching your personal data with full conversation context and intelligent contact resolution",
+  "author": {
+    "name": "Oscar"
+  }
+}

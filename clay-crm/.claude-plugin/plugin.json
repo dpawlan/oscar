@@ -1,0 +1,8 @@
+{
+  "name": "clay-crm",
+  "version": "1.0.0",
+  "description": "Clay CRM integration for Claude Code with contact management and activity tools",
+  "author": {
+    "name": "Oscar"
+  }
+}
