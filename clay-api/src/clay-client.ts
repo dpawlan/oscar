@@ -1,5 +1,6 @@
 const SEARCH_BASE_URL = 'https://search.clay.earth';
 const ACTIVITY_BASE_URL = 'https://activity.clay.earth';
+const API_BASE_URL = 'https://api.clay.earth/api';
 
 function getApiKey(): string {
   const key = process.env.CLAY_API_KEY;
@@ -81,6 +82,13 @@ export async function activityRequest<T>(
   options?: ClayRequestOptions,
 ): Promise<T> {
   return clayRequest<T>(ACTIVITY_BASE_URL, endpoint, options);
+}
+
+export async function apiRequest<T>(
+  endpoint: string,
+  options?: ClayRequestOptions,
+): Promise<T> {
+  return clayRequest<T>(API_BASE_URL, endpoint, options);
 }
 
 // ============ Type Definitions ============
