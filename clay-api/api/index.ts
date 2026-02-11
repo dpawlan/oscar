@@ -19,6 +19,13 @@ app.use(express.json());
 app.use(authMiddleware);
 
 // Routes
+app.get('/', (_req, res) => {
+  res.json({
+    name: 'Clay API',
+    endpoints: ['GET /health', 'GET /contacts', 'GET /contacts/:id', 'GET /birthdays'],
+  });
+});
+
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
