@@ -11,7 +11,7 @@ function getApiKey(): string {
 }
 
 export interface ClayRequestOptions {
-  method?: 'GET' | 'POST';
+  method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   params?: Record<string, string | number | boolean | undefined>;
   body?: unknown;
 }
@@ -56,7 +56,7 @@ export async function clayRequest<T>(
 
   const fetchOptions: RequestInit = { method, headers };
 
-  if (body && method === 'POST') {
+  if (body && ['POST', 'PATCH', 'PUT'].includes(method)) {
     fetchOptions.body = JSON.stringify(body);
   }
 

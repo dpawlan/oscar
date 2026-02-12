@@ -400,5 +400,90 @@ export function createMcpServer(): McpServer {
     },
   );
 
+  // ── clay_update_contact ──────────────────────────────────────────────
+  server.tool(
+    'clay_update_contact',
+    'Update fields on an existing contact (name, title, organization, birthday, etc.)',
+    {
+      contact_id: z.string().describe('The ID of the contact to update'),
+      first_name: z.string().optional().describe('Updated first name'),
+      last_name: z.string().optional().describe('Updated last name'),
+      title: z.string().optional().describe('Updated job title'),
+      organization: z.string().optional().describe('Updated organization/company name'),
+      birthday: z.object({
+        month: z.number().min(1).max(12).describe('Birth month (1-12)'),
+        day: z.number().min(1).max(31).describe('Birth day (1-31)'),
+      }).optional().describe('Birthday with month and day'),
+      person_lookup: z.string().optional().describe('Lookup value (email, LinkedIn URL, etc.)'),
+      lookup_type: z.enum(['email', 'twitter', 'linkedin', 'facebook', 'url', 'phone', 'manual']).optional().describe('Type of the person_lookup value'),
+    },
+    async (args) => {
+      const { contact_id, ...fields } = args;
+      const body: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(fields)) {
+        if (value !== undefined) {
+          body[key] = value;
+        }
+      }
+
+      const response = await apiRequest<Record<string, unknown>>(
+        `/v1/network/contacts/${contact_id}`,
+        { method: 'PATCH', body },
+      );
+
+      return {
+        content: [{
+          type: 'text' as const,
+          text: JSON.stringify({ success: true, contact: response }, null, 2),
+        }],
+      };
+    },
+  );
+
+  // ── clay_delete_contact ─────────────────────────────────────────────
+  server.tool(
+    'clay_delete_contact',
+    'Delete a contact from Clay',
+    {
+      contact_id: z.string().describe('The ID of the contact to delete'),
+    },
+    async (args) => {
+      await apiRequest<unknown>(
+        `/v1/network/contacts/${args.contact_id}`,
+        { method: 'DELETE' },
+      );
+
+      return {
+        content: [{
+          type: 'text' as const,
+          text: JSON.stringify({ success: true, deleted: args.contact_id }, null, 2),
+        }],
+      };
+    },
+  );
+
+  // ── clay_add_to_group ───────────────────────────────────────────────
+  server.tool(
+    'clay_add_to_group',
+    'Add one or more contacts to a list/group in Clay',
+    {
+      list_id: z.string().describe('The ID of the list/group to add contacts to'),
+      contact_ids: z.array(z.number()).describe('Array of numeric contact IDs to add to the group'),
+    },
+    async (args) => {
+      const response = await apiRequest<unknown>(
+        `/v1/network/lists/${args.list_id}/contacts`,
+        { method: 'POST', body: { contact_ids: args.contact_ids } },
+      );
+
+      return {
+        content: [{
+          type: 'text' as const,
+          text: JSON.stringify({ success: true, list_id: args.list_id, added_contacts: args.contact_ids, response }, null, 2),
+        }],
+      };
+    },
+  );
+
   return server;
 }
