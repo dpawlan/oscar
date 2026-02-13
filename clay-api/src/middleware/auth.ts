@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
-  const serverKey = process.env.CLAY_API_SERVER_KEY;
+  const serverKey = process.env.OURA_SERVER_KEY;
 
   // Skip auth if no server key is configured (local dev)
   if (!serverKey) {

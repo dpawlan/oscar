@@ -6,8 +6,6 @@ import cors from 'cors';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { authMiddleware } from '../src/middleware/auth.js';
 import { errorHandler } from '../src/middleware/error-handler.js';
-import contactsRouter from '../src/routes/contacts.js';
-import birthdaysRouter from '../src/routes/birthdays.js';
 import { createMcpServer } from '../src/mcp-server.js';
 
 // Load .env.local for local dev
@@ -23,17 +21,14 @@ app.use(authMiddleware);
 // Routes
 app.get('/', (_req, res) => {
   res.json({
-    name: 'Clay API',
-    endpoints: ['GET /health', 'GET /contacts', 'GET /contacts/:id', 'GET /birthdays', 'POST /mcp'],
+    name: 'Oura Ring API',
+    endpoints: ['GET /health', 'POST /mcp'],
   });
 });
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
-
-app.use('/contacts', contactsRouter);
-app.use('/birthdays', birthdaysRouter);
 
 // MCP Streamable HTTP endpoint (stateless — no sessions)
 app.post('/mcp', async (req, res) => {
@@ -58,9 +53,9 @@ app.use(errorHandler);
 
 // Local dev server
 if (process.env.NODE_ENV !== 'production') {
-  const port = process.env.PORT || 3002;
+  const port = process.env.PORT || 3003;
   app.listen(port, () => {
-    console.log(`Clay API server running on http://localhost:${port}`);
+    console.log(`Oura Ring API server running on http://localhost:${port}`);
   });
 }
 

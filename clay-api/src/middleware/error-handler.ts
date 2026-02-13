@@ -1,10 +1,10 @@
 import type { Request, Response, NextFunction } from 'express';
-import { ClayApiError } from '../clay-client.js';
+import { OuraApiError } from '../oura-client.js';
 
 export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction): void {
   console.error('Error:', err.message);
 
-  if (err instanceof ClayApiError) {
+  if (err instanceof OuraApiError) {
     res.status(err.statusCode).json({ error: err.message });
     return;
   }
