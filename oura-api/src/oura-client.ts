@@ -1,16 +1,5 @@
 const BASE_URL = 'https://api.ouraring.com';
 
-function getAccessToken(user?: string): string {
-  if (user?.toLowerCase() === 'brittany') {
-    const token = process.env.OURA_ACCESS_TOKEN_BRITTANY;
-    if (!token) throw new Error('OURA_ACCESS_TOKEN_BRITTANY is not set');
-    return token;
-  }
-  const token = process.env.OURA_ACCESS_TOKEN;
-  if (!token) throw new Error('OURA_ACCESS_TOKEN is not set');
-  return token;
-}
-
 export class OuraApiError extends Error {
   constructor(
     public statusCode: number,
@@ -28,10 +17,12 @@ export interface OuraRequestOptions {
 export async function ouraRequest<T>(
   endpoint: string,
   options: OuraRequestOptions = {},
-  user?: string,
+  token?: string,
 ): Promise<T> {
   const { params } = options;
-  const token = getAccessToken(user);
+  if (!token) {
+    throw new Error('No access token provided');
+  }
 
   let url = `${BASE_URL}${endpoint}`;
 

@@ -22,7 +22,7 @@ app.use(authMiddleware);
 app.get('/', (_req, res) => {
   res.json({
     name: 'Oura Ring API',
-    endpoints: ['GET /health', 'POST /mcp'],
+    endpoints: ['GET /health', 'POST /mcp', 'POST /mcp-brittany-oura'],
   });
 });
 
@@ -30,15 +30,25 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// MCP Streamable HTTP endpoint (stateless — no sessions)
-app.post('/mcp', async (req, res) => {
-  const server = createMcpServer();
+// Helper: handle an MCP request with the given access token
+async function handleMcp(req: express.Request, res: express.Response, token: string) {
+  const server = createMcpServer(token);
   const transport = new StreamableHTTPServerTransport({
     sessionIdGenerator: undefined,
   });
   await server.connect(transport);
   await transport.handleRequest(req, res, req.body);
   await server.close();
+}
+
+// MCP endpoint — David (default)
+app.post('/mcp', async (req, res) => {
+  await handleMcp(req, res, process.env.OURA_ACCESS_TOKEN!);
+});
+
+// MCP endpoint — Brittany
+app.post('/mcp-brittany-oura', async (req, res) => {
+  await handleMcp(req, res, process.env.OURA_ACCESS_TOKEN_BRITTANY!);
 });
 
 app.get('/mcp', (_req, res) => {
