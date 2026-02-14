@@ -55,7 +55,15 @@ app.get('/mcp', (_req, res) => {
   res.status(405).json({ error: 'Method Not Allowed. Use POST for MCP requests.' });
 });
 
+app.get('/mcp-brittany-oura', (_req, res) => {
+  res.status(405).json({ error: 'Method Not Allowed. Use POST for MCP requests.' });
+});
+
 app.delete('/mcp', (_req, res) => {
+  res.status(405).json({ error: 'Method Not Allowed. This is a stateless endpoint.' });
+});
+
+app.delete('/mcp-brittany-oura', (_req, res) => {
   res.status(405).json({ error: 'Method Not Allowed. This is a stateless endpoint.' });
 });
 
