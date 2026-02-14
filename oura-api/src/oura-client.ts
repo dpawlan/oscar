@@ -1,10 +1,13 @@
 const BASE_URL = 'https://api.ouraring.com';
 
-function getAccessToken(): string {
-  const token = process.env.OURA_ACCESS_TOKEN;
-  if (!token) {
-    throw new Error('OURA_ACCESS_TOKEN environment variable is not set');
+function getAccessToken(user?: string): string {
+  if (user?.toLowerCase() === 'brittany') {
+    const token = process.env.OURA_ACCESS_TOKEN_BRITTANY;
+    if (!token) throw new Error('OURA_ACCESS_TOKEN_BRITTANY is not set');
+    return token;
   }
+  const token = process.env.OURA_ACCESS_TOKEN;
+  if (!token) throw new Error('OURA_ACCESS_TOKEN is not set');
   return token;
 }
 
@@ -25,9 +28,10 @@ export interface OuraRequestOptions {
 export async function ouraRequest<T>(
   endpoint: string,
   options: OuraRequestOptions = {},
+  user?: string,
 ): Promise<T> {
   const { params } = options;
-  const token = getAccessToken();
+  const token = getAccessToken(user);
 
   let url = `${BASE_URL}${endpoint}`;
 

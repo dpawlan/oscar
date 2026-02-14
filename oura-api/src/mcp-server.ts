@@ -2,6 +2,8 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { ouraRequest } from './oura-client.js';
 
+const userParam = z.enum(['david', 'brittany']).optional().describe('Whose Oura data to fetch (default: david)');
+
 export function createMcpServer(): McpServer {
   const server = new McpServer({
     name: 'Oura Ring API',
@@ -12,9 +14,9 @@ export function createMcpServer(): McpServer {
   server.tool(
     'oura_get_personal_info',
     'Get user profile information (age, weight, height, biological sex, email)',
-    {},
-    async () => {
-      const data = await ouraRequest('/v2/usercollection/personal_info');
+    { user: userParam },
+    async ({ user }) => {
+      const data = await ouraRequest('/v2/usercollection/personal_info', {}, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
@@ -26,11 +28,12 @@ export function createMcpServer(): McpServer {
     {
       start_date: z.string().optional().describe('Start date (YYYY-MM-DD)'),
       end_date: z.string().optional().describe('End date (YYYY-MM-DD)'),
+      user: userParam,
     },
-    async ({ start_date, end_date }) => {
+    async ({ start_date, end_date, user }) => {
       const data = await ouraRequest('/v2/usercollection/daily_sleep', {
         params: { start_date, end_date },
-      });
+      }, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
@@ -42,11 +45,12 @@ export function createMcpServer(): McpServer {
     {
       start_date: z.string().optional().describe('Start date (YYYY-MM-DD)'),
       end_date: z.string().optional().describe('End date (YYYY-MM-DD)'),
+      user: userParam,
     },
-    async ({ start_date, end_date }) => {
+    async ({ start_date, end_date, user }) => {
       const data = await ouraRequest('/v2/usercollection/sleep', {
         params: { start_date, end_date },
-      });
+      }, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
@@ -58,11 +62,12 @@ export function createMcpServer(): McpServer {
     {
       start_date: z.string().optional().describe('Start date (YYYY-MM-DD)'),
       end_date: z.string().optional().describe('End date (YYYY-MM-DD)'),
+      user: userParam,
     },
-    async ({ start_date, end_date }) => {
+    async ({ start_date, end_date, user }) => {
       const data = await ouraRequest('/v2/usercollection/daily_activity', {
         params: { start_date, end_date },
-      });
+      }, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
@@ -74,11 +79,12 @@ export function createMcpServer(): McpServer {
     {
       start_date: z.string().optional().describe('Start date (YYYY-MM-DD)'),
       end_date: z.string().optional().describe('End date (YYYY-MM-DD)'),
+      user: userParam,
     },
-    async ({ start_date, end_date }) => {
+    async ({ start_date, end_date, user }) => {
       const data = await ouraRequest('/v2/usercollection/daily_readiness', {
         params: { start_date, end_date },
-      });
+      }, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
@@ -90,11 +96,12 @@ export function createMcpServer(): McpServer {
     {
       start_date: z.string().optional().describe('Start date (YYYY-MM-DD)'),
       end_date: z.string().optional().describe('End date (YYYY-MM-DD)'),
+      user: userParam,
     },
-    async ({ start_date, end_date }) => {
+    async ({ start_date, end_date, user }) => {
       const data = await ouraRequest('/v2/usercollection/heartrate', {
         params: { start_date, end_date },
-      });
+      }, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
@@ -106,11 +113,12 @@ export function createMcpServer(): McpServer {
     {
       start_date: z.string().optional().describe('Start date (YYYY-MM-DD)'),
       end_date: z.string().optional().describe('End date (YYYY-MM-DD)'),
+      user: userParam,
     },
-    async ({ start_date, end_date }) => {
+    async ({ start_date, end_date, user }) => {
       const data = await ouraRequest('/v2/usercollection/daily_spo2', {
         params: { start_date, end_date },
-      });
+      }, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
@@ -122,11 +130,12 @@ export function createMcpServer(): McpServer {
     {
       start_date: z.string().optional().describe('Start date (YYYY-MM-DD)'),
       end_date: z.string().optional().describe('End date (YYYY-MM-DD)'),
+      user: userParam,
     },
-    async ({ start_date, end_date }) => {
+    async ({ start_date, end_date, user }) => {
       const data = await ouraRequest('/v2/usercollection/daily_stress', {
         params: { start_date, end_date },
-      });
+      }, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
@@ -138,11 +147,12 @@ export function createMcpServer(): McpServer {
     {
       start_date: z.string().optional().describe('Start date (YYYY-MM-DD)'),
       end_date: z.string().optional().describe('End date (YYYY-MM-DD)'),
+      user: userParam,
     },
-    async ({ start_date, end_date }) => {
+    async ({ start_date, end_date, user }) => {
       const data = await ouraRequest('/v2/usercollection/workout', {
         params: { start_date, end_date },
-      });
+      }, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
@@ -154,11 +164,12 @@ export function createMcpServer(): McpServer {
     {
       start_date: z.string().optional().describe('Start date (YYYY-MM-DD)'),
       end_date: z.string().optional().describe('End date (YYYY-MM-DD)'),
+      user: userParam,
     },
-    async ({ start_date, end_date }) => {
+    async ({ start_date, end_date, user }) => {
       const data = await ouraRequest('/v2/usercollection/session', {
         params: { start_date, end_date },
-      });
+      }, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
@@ -167,9 +178,9 @@ export function createMcpServer(): McpServer {
   server.tool(
     'oura_get_ring_configuration',
     'Get ring hardware info including color, design, firmware version, hardware type, and set-up date.',
-    {},
-    async () => {
-      const data = await ouraRequest('/v2/usercollection/ring_configuration');
+    { user: userParam },
+    async ({ user }) => {
+      const data = await ouraRequest('/v2/usercollection/ring_configuration', {}, user);
       return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
     },
   );
